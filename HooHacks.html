@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://fiala.uk/atrament.js/demo/ -->
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<title>The Alphabet Game - Play</title>
+		<script src="./atrament.min.js"></script>
+
+		<style>
+			form {
+				z-index: 3;
+				position: fixed;
+				top: 300;
+				left: 100;
+				background: rgba(0, 0, 0, 0.7);
+				padding: 1em;
+				color:white;
+			}
+
+			form * {
+				margin-bottom: 1em;
+			}
+
+			@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+				form * {
+					font-size: 1.5em;
+				}
+			}
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				
+
+				background-color: rgb(105, 125, 231);
+				background-image: url('landingpage.jpg');
+				background-size: cover;
+
+				font-family: sans-serif;
+				padding: 1em;
+			}
+			/* white right box to draw in */
+			#rightBox {
+				background-color:white;
+				width: 26%;
+				
+				height: 26vw;
+				padding: 1.9%;
+				margin: 1.8%;
+				/* margin-left: 750px; */
+				margin-left: 55%;
+				position: relative;
+			}
+
+			 /* Clear Pad and Finish Buttons */
+			 #myButtons { /* this is for the finish button background static */
+            	background:rgb(235, 150, 60);
+            	color: white;
+            	font-size: 150%;
+            	text-decoration: none;
+            	margin-top: 50vh;
+				margin-left: 3.7vw;
+            	border-radius: 2vw;
+				width: 7.6vw;
+				height: 7.2vh;
+        	}
+
+    		#myButtons:hover { /* this is for the active hovering actions of finish button*/
+            	background: rgb(220, 60, 121);
+        	}
+
+			#backButton {
+                font-size: 120%;
+                font-family: Arial, Helvetica, sans-serif;
+				top: 0;
+				left: 0;
+                padding: 1%;
+                border-radius: 2vw;
+                background: rgb(235, 150, 60);
+                color: white;
+            } 
+			#backButton:hover { /* this is for the active hovering actions of finish button*/
+            	background: rgb(220, 60, 121);
+        	}
+
+
+			/* score button */
+			#scoreButton {
+				background:rgb(235, 150, 60);
+            	color: black;
+            	font-size: 180%;
+            	margin-top: 0px;
+				margin-left: 75%;
+            	border-radius: 1vw;
+				width: 28%;
+				height: 14%;
+			}
+			
+			canvas {
+				width: 30vw;
+				height: 51vh;
+				top: 13vh;
+				left: 54vw;
+				z-index: 2;
+				position: fixed;
+			}
+			#gif {
+				margin-top: 1.7%;
+				margin-left: 15%;
+				float: left;
+				width: 31%;
+  				height: auto;
+			}
+
+			#score {
+				font-size: 0%;
+				/* font-size: 900%; */
+				float: left;
+			}
+			#stars {
+				width: auto;
+  				height: 2.5vw;
+				position: fixed;
+			}
+			#finalStars {
+				height: 5vw;
+				width: auto;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div>
+			<button id="backButton" onclick="location.href='./index.html';">Go Back</button>
+		</div>
+		<!-- <form>
+			<button onclick="event.preventDefault(); atrament.clear();">clear</button><br>
+			<label>Thickness</label><br>
+			<input type="range" min="1" max="40" oninput="atrament.weight = parseFloat(event.target.value);" value="2" step="0.1" autocomplete="off"><br>
+			<label>Smoothing</label><br>
+			<input type="checkbox" onchange="atrament.smoothing = event.target.checked;" checked="" autocomplete="off"><br>
+			<label>Mode</label>
+			<select onchange="atrament.mode = event.target.value;">
+				<option value="draw" default="">Draw</option>
+				<option value="fill" default="">Fill</option>
+				<option value="erase" default="">Erase</option>
+			</select><br>
+			<label>Colour</label>
+			<input type="color" onchange="atrament.color = event.target.value;" value="#000000" autocomplete="off"><br>
+			<label>Opacity</label><br>
+			<input type="range" min="0" max="1" onchange="atrament.opacity = parseFloat(event.target.value);" value="1" step="0.05" autocomplete="off">
+			<button onclick="var dataURL = atrament.toImage();window.open(dataURL);">submit</button>
+		</form> -->
+		<img id="gif" src="./gifs/a.gif" alt="letter a">
+		<canvas width="1063" height="606" style="cursor: crosshair;" onmousedown="startTimer()" onmouseup="endTimer()"></canvas>
+		<script>
+			var startTime = 0;
+			var endTime;
+			var diff = 0;
+			var score = 0;
+			var count = 0;
+			function startTimer() {
+				
+				startTime = new Date();
+				
+				// alert(startTime);
+			}
+			function endTimer() {
+				endTime = new Date();
+				diff = endTime- startTime;
+				startTime = 0;
+			}
+			var letter = 'a';
+				function cycle() {
+					letter = nextChar(letter)
+					var dataURL = atrament.toImage();
+					// window.open(dataURL);
+					document.getElementById('scoreButton').innerHTML = Math.floor(Math.min(diff/200, 10)) + '/10';
+					document.getElementById('gif').src = './gifs/' + letter + '.gif';
+					event.preventDefault(); 
+					atrament.clear();
+					count++;
+					score += Math.floor(Math.min(diff/200, 10));
+					document.getElementById('score').innerHTML = Math.round(score/count);
+
+
+					if (7 < Math.floor(Math.min(diff/200, 10))) {
+						document.getElementById('stars').src = 'stars/5star.png';
+					} else if (5 < Math.floor(Math.min(diff/200, 10))) {
+						document.getElementById('stars').src = 'stars/4star.png';
+					} else if (4 < Math.floor(Math.min(diff/200, 10))) {
+						document.getElementById('stars').src = 'stars/3star.png';
+					} else if (3 < Math.floor(Math.min(diff/200, 10))) {
+						document.getElementById('stars').src = 'stars/2star.png';
+					} else {
+						document.getElementById('stars').src = 'stars/1star.png';
+					}
+
+					if (7 < score / count) {
+						document.getElementById('finalStars').src = 'stars/5star.png';
+					} else if (5 < score / count) {
+						document.getElementById('finalStars').src = 'stars/4star.png';
+					} else if (4 < score / count) {
+						document.getElementById('finalStars').src = 'stars/3star.png';
+					} else if (3 < score / count) {
+						document.getElementById('finalStars').src = 'stars/2star.png';
+					} else {
+						document.getElementById('finalStars').src = 'stars/1star.png';
+					}
+				}
+		</script>
+
+	<script>
+		var atrament = atrament('canvas', window.innerWidth*.3, window.innerHeight*.51);
+		atrament.weight = 30;
+		//we have to get the dataURL of the image
+	</script>
+	<div id = "rightBox">
+		<img id=stars src="">
+
+		<button id = "scoreButton">Score</button><br>
+		<!-- The Finish Button -->
+		<input id = "myButtons" type="submit" value="Clear" onclick="event.preventDefault(); atrament.clear();">
+		<button id = "myButtons" type="button" onclick="cycle();">Finish</button>
+	</div>
+
+	
+	<script>
+		function nextChar(c) {
+			if (c == 'z') {
+				return 'a';
+			} else {
+				return String.fromCharCode(c.charCodeAt(0) + 1);
+			}
+		}
+		nextChar('a');
+	</script>
+	<center>
+		<h1 id="score">0</h1>
+	</center>
+	<center>
+		<br></br>
+		<br></br>
+		<h1>Average score: </h1>
+		<img id="finalStars" src="">
+	</center>
+		
+	
+	
+	
+</body>
+</html>
