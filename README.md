@@ -1,5 +1,7 @@
 # HooHacks 2019
 
+http://supportvectormonsters.com
+
 ## Inspiration
 Perfect practice makes perfect: Students should be able to receive feedback on the practice they are doing in real times so they are able to correct their strokes for the future.
 
